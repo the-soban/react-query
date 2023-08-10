@@ -8,8 +8,8 @@ const POSTS = [
 
 function App() {
     const postsQuery = useQuery({
-        queryKey: ['posts'],
-        queryFn: () => Promise.reject('I reject it!!'),
+        queryKey: ['posts'], //first thing to give to the query: a unique identifier key
+        queryFn: () => wait(1000).then(() => [...POSTS]), //second thing: a function that fetches the actual data, could be an axios request too, or a fetch method call
     })
 
     if (postsQuery.isLoading) {
@@ -22,6 +22,9 @@ function App() {
     return (
         <>
             <h1>Hello World</h1>
+            {postsQuery.data.map((post) => (
+                <div key={post.id}>{post.title}</div> //to loop through the data show each of our post
+            ))}
         </>
     )
 }
