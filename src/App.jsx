@@ -12,6 +12,10 @@ function App() {
         queryFn: () => wait(1000).then(() => [...POSTS]), //second thing: a function that fetches the actual data, could be an axios request too, or a fetch method call
     })
 
+    const newMutation = useMutation({
+      mutationFn
+    })
+
     if (postsQuery.isLoading) {
         return <h1>Loading...</h1>
     }
