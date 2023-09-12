@@ -28,7 +28,7 @@ const App = () => {
                 })
             );
         },
-        onSuccess: queryClient.invalidateQueries(['posts']),
+        onSuccess: queryClient.invalidateQueries(['posts']), //this will invalidate any previous queries that are rendered by useQuery and refetch the data
     });
 
     if (postsQuery.isLoading) {
@@ -45,7 +45,7 @@ const App = () => {
                 <div key={post.id}>{post.title}</div> //now if our query is successful, then this data will be returned cause the query being successful means the data would be already fetched
             ))}
             <button
-                disabled={newPostsMutation.isLoading}
+                disabled={newPostsMutation.isLoading} //this will disable the button if the mutation function is in loading state
                 onClick={() => newPostsMutation.mutate('Newly added post')}
             >
                 Add New Post
