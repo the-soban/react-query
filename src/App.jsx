@@ -1,5 +1,5 @@
 import React from 'react';
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import './App.css';
 
 const POSTS = [
@@ -8,6 +8,8 @@ const POSTS = [
 ];
 
 const App = () => {
+    const queryClient = useQueryClient();
+
     //THIS IS HOW A QUERY WORKS:
     const postsQuery = useQuery({
         queryKey: ['posts'], //this is a unique identifier for this query, and it always accepts an array as a value
@@ -26,6 +28,7 @@ const App = () => {
                 })
             );
         },
+        onSuccess: queryClient.invalidateQueries(['posts']),
     });
 
     if (postsQuery.isLoading) {
@@ -41,7 +44,10 @@ const App = () => {
             {postsQuery.data.map((post) => (
                 <div key={post.id}>{post.title}</div> //now if our query is successful, then this data will be returned cause the query being successful means the data would be already fetched
             ))}
-            <button onClick={() => newPostsMutation.mutate('Newly added post')}>
+            <button
+                disabled={newPostsMutation.isLoading}
+                onClick={() => newPostsMutation.mutate('Newly added post')}
+            >
                 Add New Post
             </button>
         </div>
