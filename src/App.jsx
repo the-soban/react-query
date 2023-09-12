@@ -8,10 +8,24 @@ const POSTS = [
 ];
 
 const App = () => {
+    //THIS IS HOW A QUERY WORKS:
     const postsQuery = useQuery({
         queryKey: ['posts'], //this is a unique identifier for this query, and it always accepts an array as a value
         queryFn: () => wait(1000).then(() => [...POSTS]), //this is the actual query function that'll be performed, and it always accepts a promise
         // queryFn: () => Promise.reject('This is error message'), //this message will be returned if there's error
+    });
+
+    //THIS IS HOW A MUTATION WORKS:
+    const newPostsMutation = useMutation({
+        mutationFn: (title) => {
+            //just like useQuery, useMutation takes in a mutation function that always returns a promise and performs what the actual mutation is supposed to do
+            return wait(1000).then(() =>
+                POSTS.push({
+                    id: crypto.randomUUID(),
+                    title,
+                })
+            );
+        },
     });
 
     if (postsQuery.isLoading) {
@@ -20,12 +34,16 @@ const App = () => {
     if (postsQuery.isError) {
         return <pre>{JSON.stringify(postsQuery.error)}</pre>; //shows an error message if there's an error
     }
+    console.log(POSTS);
 
     return (
         <div>
             {postsQuery.data.map((post) => (
                 <div key={post.id}>{post.title}</div> //now if our query is successful, then this data will be returned cause the query being successful means the data would be already fetched
             ))}
+            <button onClick={() => newPostsMutation.mutate('Newly added post')}>
+                Add New Post
+            </button>
         </div>
     );
 };
