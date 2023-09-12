@@ -22,9 +22,11 @@ const App = () => {
     }
 
     return (
-        <>
-            <h1>Hello World</h1>
-        </>
+        <div>
+            {postsQuery.data.map((post) => (
+                <div key={post.id}>{post.title}</div> //now if our query is successful, then this data will be returned cause the query being successful means the data would be already fetched
+            ))}
+        </div>
     );
 };
 
